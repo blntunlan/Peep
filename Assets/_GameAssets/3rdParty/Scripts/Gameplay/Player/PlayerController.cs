@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,8 +10,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private KeyCode m_moveKey;
     [SerializeField] private float m_movementSpeed;
 
+    [FormerlySerializedAs("m_jumpKey")]
     [Header("Jump Settings")]
-    [SerializeField] private KeyCode m_jumpKey;
+    [SerializeField] private KeyCode _jumpKey;
     [SerializeField] private float m_jumpForce;
     [SerializeField] private float m_playerHeight;
     [SerializeField] private bool m_canJump = true;
@@ -50,7 +52,7 @@ public class PlayerController : MonoBehaviour
         LimitPlayerSpeed();
 
         // Debugging
-        Debug.DrawRay(transform.position, Vector3.down * (m_playerHeight * 0.5f + 0.2f), Color.red);
+        Debug.DrawRay(transform.position, Vector3.down * (m_playerHeight * 0.5f + 0.2f), IsGrounded() ? Color.green : Color.red);
 
         if (m_rigidbody != null)
         {
@@ -63,6 +65,7 @@ public class PlayerController : MonoBehaviour
         SetPlayerMovement();
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void SetInputs()
     {
         m_verticalInput = Input.GetAxis("Vertical");
@@ -71,14 +74,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(m_slideKey))
         {
             m_isSliding = true;
-            Debug.Log("Slide");
         }
         else if (Input.GetKeyDown(m_moveKey))
         {
             m_isSliding = false;
-            Debug.Log("Not Sliding");
         }
-        else if (Input.GetKey(m_jumpKey) && IsGrounded() && m_canJump)
+        else if (Input.GetKey(_jumpKey) && IsGrounded() && m_canJump)
         {
             m_canJump = false;
             SetPlayerJumping();
@@ -88,7 +89,7 @@ public class PlayerController : MonoBehaviour
 
     private void SetPlayerMovement()
     {
-        if (m_orientTransform == null || m_rigidbody == null)
+        if (m_orientTransform == null)
             return;
 
         m_moveDirection = m_orientTransform.forward * m_verticalInput + m_orientTransform.right * m_horizontalInput;
@@ -99,17 +100,11 @@ public class PlayerController : MonoBehaviour
 
     private void SetPlayerDrag()
     {
-        if (m_rigidbody == null)
-            return;
-
         m_rigidbody.linearDamping = m_isSliding ? m_dampingValue : m_groundDrag;
     }
 
     private void LimitPlayerSpeed()
     {
-        if (m_rigidbody == null)
-            return;
-
         Vector3 flatVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z);
         if (flatVelocity.magnitude > m_movementSpeed)
         {
@@ -120,10 +115,7 @@ public class PlayerController : MonoBehaviour
 
     private void SetPlayerJumping()
     {
-        if (m_rigidbody == null)
-            return;
-
-        m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0, m_rigidbody.linearVelocity.z);
+        m_rigidbody.linearVelocity = new Vector3(m_rigidbody.linearVelocity.x, 0f, m_rigidbody.linearVelocity.z);
         m_rigidbody.AddForce(transform.up * m_jumpForce, ForceMode.Impulse);
     }
 
@@ -134,6 +126,6 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, m_playerHeight * 0.5f + 0.2f, m_groundLayer);
+        return Physics.Raycast(transform.position, Vector3.down, (m_playerHeight * 0.5f) + 0.2f, m_groundLayer);
     }
 }
