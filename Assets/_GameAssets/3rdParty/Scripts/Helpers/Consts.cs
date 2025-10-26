@@ -14,4 +14,9 @@ public class Consts
         public const string HOLY_WHEAT = "HolyWheat";
         public const string ROTTEN_WHEAT = "RottenWheat";
     }
+    
+    public struct Spatula
+    {
+        public const string SPATULE = "IsSpatulaJumping";
+    }
 }
