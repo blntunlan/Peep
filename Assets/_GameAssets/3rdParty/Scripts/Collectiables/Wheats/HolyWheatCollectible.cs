@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HolyWheatCollectible : MonoBehaviour
+public class HolyWheatCollectible : MonoBehaviour, ICollectiable
 {
     [SerializeField] PlayerController _playerController;
     [SerializeField] private float _movementIncreaseSpeed;
