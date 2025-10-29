@@ -1,0 +1,13 @@
+{
+    "asset": "ad6c5b0a4bb5cc744b1be13d5b70993a",
+    "fileName": "019a2fee-6994-707a-93e2-04099e445406.wav",
+    "prompt": "8-bit shotgun blast — low square/pulse main body with short noise smash for spread, layered with a low sub-thump (sine) for weight, longer decay (decay 140–260 ms), release 200 ms, heavier bitcrush (6–8 bits) and lower sample rate (16000 Hz) for gritty retro console feel, mono WAV.",
+    "negativePrompt": "",
+    "model": "ee31b223-3fe1-4ae6-bf54-d8a80bb4b0e1",
+    "modelName": "Text to Sound",
+    "customSeed": -1,
+    "w3CTraceId": "620a4497e974ffbce8c4c3150a687073",
+    "duration": 1.0,
+    "autoTrim": true,
+    "hasReference": false
+}

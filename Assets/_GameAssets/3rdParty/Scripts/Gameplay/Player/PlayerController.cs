@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void SetStates()
     {
         var isGrounded = IsGrounded();
