@@ -27,7 +27,6 @@ public class SettingsUI : MonoBehaviour
         
         _settingsButton.onClick.AddListener(OnSettingsButtonClick);
         _resumeButton.onClick.AddListener(OnResumeButtonClick);
-
     }
 
     private void OnSettingsButtonClick()

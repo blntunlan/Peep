@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
             _ => 1f
         };
 
-        m_rigidbody.AddForce(m_moveDirection.normalized * m_movementSpeed * forceMultiplier, ForceMode.Force);
+        m_rigidbody.AddForce(m_moveDirection.normalized * (m_movementSpeed * forceMultiplier), ForceMode.Force);
     }
 
     private void SetPlayerDrag()
