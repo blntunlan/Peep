@@ -22,7 +22,7 @@ public class EggCounterUI : MonoBehaviour
         _eggCounterText.text = count.ToString() + "/" + max.ToString();
     }
 
-    public void SetEggComplted()
+    public void SetEggCompleted()
     {
         _eggCounterText.DOColor(_eggCounterColor, ColorChangeDuration).SetEase(Ease.OutBack);
         _eggCounterRectTransform.DOScale(1.2f, _scale).SetEase(Ease.Flash);

@@ -9,6 +9,9 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (GameManager.Instance.GetCurrentGameState() != GameState.Play && GameManager.Instance.GetCurrentGameState() != GameState.Resume)
+            return;
+        
         if (!m_playerTransform || !m_orientationTransform || !m_playerVisualTransform)
             return;
 

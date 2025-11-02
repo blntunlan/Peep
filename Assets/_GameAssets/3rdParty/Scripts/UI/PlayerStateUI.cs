@@ -6,18 +6,17 @@ using UnityEngine.UI;
 public class PlayerStateUI : MonoBehaviour
 {
     [Header("References")] 
-    [SerializeField]private PlayerController _playerController;
-    [SerializeField]private RectTransform _playerWalkingTransform;
-    [SerializeField]private RectTransform _playerSlidingTransfrom;
-    [SerializeField]private RectTransform _boosterSpeedTransform;
-    [SerializeField]private RectTransform _boosterJumpTransform;
-    [SerializeField]private RectTransform _boosterSlowTransform;
+    [SerializeField] private PlayerController _playerController;
+    [SerializeField] private RectTransform _playerWalkingTransform;
+    [SerializeField] private RectTransform _playerSlidingTransfrom;
+    [SerializeField] private RectTransform _boosterSpeedTransform;
+    [SerializeField] private RectTransform _boosterJumpTransform;
+    [SerializeField] private RectTransform _boosterSlowTransform;
     
     [Header("Images")]
     [SerializeField] private Image _goldBoosterImage;
     [SerializeField] private Image _holyBoosterImage;
     [SerializeField] private Image _rottenBoosterImage;
-    
     
     [Header("Sprites")]
     [SerializeField] private Sprite _playerWalkingActiveSprite;
@@ -29,6 +28,9 @@ public class PlayerStateUI : MonoBehaviour
     [SerializeField] private float _moveDuration;
     [SerializeField] private Ease _moveEas;
 
+    private Image _playerWalkingImage;
+    private Image _playerSlidingImage;
+
     public RectTransform GetBoosterSpeedTransform() => _boosterSpeedTransform;
     public RectTransform GetBoosterJumpTransform() => _boosterJumpTransform;
     public RectTransform GetBoosterSlowTransform() => _boosterSlowTransform;
@@ -36,24 +38,22 @@ public class PlayerStateUI : MonoBehaviour
     public Image GetGoldBoosterImage() => _goldBoosterImage;
     public Image GetHolyBoosterImage() => _holyBoosterImage;
     public Image GetRottenBoosterImage() => _rottenBoosterImage;
-    
-    
-    private Image _playerWalkingImage;
-    private Image _playerSlidingImage;
-
 
     private void Awake()
     {
         _playerWalkingImage = _playerWalkingTransform.GetComponent<Image>();
         _playerSlidingImage = _playerSlidingTransfrom.GetComponent<Image>();
-
     }
 
     private void Start()
     {
         _playerController.OnPlayerStateChanged += PlayerControllerOnOnPlayerStateChanged;
-        SetStateUI(_playerWalkingActiveSprite,_playerSlidingPassiveSprite,_playerWalkingTransform,_playerSlidingTransfrom);
-        
+        SetStateUI(_playerWalkingActiveSprite, _playerSlidingPassiveSprite, _playerWalkingTransform, _playerSlidingTransfrom);
+    }
+
+    private void OnDisable()
+    {
+        _playerController.OnPlayerStateChanged -= PlayerControllerOnOnPlayerStateChanged;
     }
 
     private void PlayerControllerOnOnPlayerStateChanged(PlayerState playerState)
@@ -62,11 +62,11 @@ public class PlayerStateUI : MonoBehaviour
         {
             case PlayerState.Idle:
             case PlayerState.Move:
-                SetStateUI(_playerWalkingActiveSprite,_playerSlidingPassiveSprite,_playerWalkingTransform,_playerSlidingTransfrom);
+                SetStateUI(_playerWalkingActiveSprite, _playerSlidingPassiveSprite, _playerWalkingTransform, _playerSlidingTransfrom);
                 break;
             case PlayerState.SlideIdle:
             case PlayerState.Slide:
-                SetStateUI(_playerWalkingPassiveSprite,_playerSlidingActiveSprite,_playerSlidingTransfrom,_playerWalkingTransform);
+                SetStateUI(_playerWalkingPassiveSprite, _playerSlidingActiveSprite, _playerSlidingTransfrom, _playerWalkingTransform);
                 break;
         }
     }
@@ -79,36 +79,24 @@ public class PlayerStateUI : MonoBehaviour
         passiveTransform.DOAnchorPosX(-90, _moveDuration).SetEase(_moveEas);
     }
 
-    private void OnDisable()
-    {
-        _playerController.OnPlayerStateChanged -= PlayerControllerOnOnPlayerStateChanged;
-    }
-
-    private IEnumerator SetBoosterUserInterface(RectTransform activeTransfrom, Image boosterImage, Image wheatImage, Sprite activeSprite, Sprite passiveSprite, Sprite activeWheatSprite, Sprite passiveWheatSprite, float duration)
-    {
-        boosterImage.sprite = activeSprite;
-        wheatImage.sprite = activeWheatSprite;
-        activeTransfrom.DOAnchorPosX(25, duration).SetEase(_moveEas);
-        yield return new WaitForSeconds(duration);
-        boosterImage.sprite = passiveSprite;
-        wheatImage.sprite = passiveWheatSprite;
-        activeTransfrom.DOAnchorPosX(90, duration).SetEase(_moveEas);
-        
-        yield return new WaitForSeconds(duration);
-        
-        boosterImage.sprite = passiveSprite;
-        wheatImage.sprite = passiveWheatSprite;
-        activeTransfrom.DOAnchorPosX(90, duration).SetEase(_moveEas);
-    }
-
     public void PlayBoosterUIAnimation(RectTransform activeTransfrom, Image boosterImage, Image wheatImage,
         Sprite activeSprite, Sprite passiveSprite, Sprite activeWheatSprite, Sprite passiveWheatSprite, float duration)
     {
         StartCoroutine(SetBoosterUserInterface(activeTransfrom, boosterImage, wheatImage, activeSprite, passiveSprite,
             activeWheatSprite, passiveWheatSprite, duration));
     }
-    
-    
+
+    private IEnumerator SetBoosterUserInterface(RectTransform activeTransfrom, Image boosterImage, Image wheatImage, 
+        Sprite activeSprite, Sprite passiveSprite, Sprite activeWheatSprite, Sprite passiveWheatSprite, float duration)
+    {
+        boosterImage.sprite = activeSprite;
+        wheatImage.sprite = activeWheatSprite;
+        activeTransfrom.DOAnchorPosX(25, duration).SetEase(_moveEas);
+        
+        yield return new WaitForSeconds(duration);
+        
+        boosterImage.sprite = passiveSprite;
+        wheatImage.sprite = passiveWheatSprite;
+        activeTransfrom.DOAnchorPosX(90, duration).SetEase(_moveEas);
+    }
 }
-
-
